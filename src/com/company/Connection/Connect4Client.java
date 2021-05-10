@@ -6,8 +6,6 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,7 +32,6 @@ public class Connect4Client extends Thread {
             socket = new Socket(InetAddress.getByName(hostname), port);
             out = new ObjectOutputStream(socket.getOutputStream());
             in = new ObjectInputStream(socket.getInputStream());
-
             while (notFinished) {
                 request = getRequest();
                 out.writeObject(request);
