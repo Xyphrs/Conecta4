@@ -11,7 +11,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Connect4Client extends Thread {
-    Scanner scanner = new Scanner(System.in);
     String hostname;
     boolean notFinished = true;
     int port;
@@ -51,7 +50,6 @@ public class Connect4Client extends Thread {
     }
 
     public String getRequest() {
-
         notFinished = false;
         return "Hola";
     }
