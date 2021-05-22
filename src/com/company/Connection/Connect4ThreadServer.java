@@ -1,5 +1,7 @@
 package com.company.Connection;
 
+import com.company.Game.Tablero;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -8,12 +10,12 @@ import java.net.Socket;
 public class Connect4ThreadServer implements Runnable {
     Socket clientSocket1;
     Socket clientSocket2;
+    int player;
     ObjectInputStream in1;
     ObjectOutputStream out1;
     ObjectInputStream in2;
     ObjectOutputStream out2;
-    Object msgEntrant;
-    Object msgSortint;
+    Tablero msgEntrant = new Tablero();
     boolean acabat;
 
     public Connect4ThreadServer(Socket clientSocket1, Socket clientSocket2) throws IOException {
@@ -29,16 +31,20 @@ public class Connect4ThreadServer implements Runnable {
     @Override
     public void run() {
         try {
+            out1.writeObject(msgEntrant);
+            out1.flush();
             while(!acabat) {
-                msgEntrant = in1.readObject();
-                msgSortint = generateMove(msgEntrant);
-                out1.writeObject(msgSortint);
-                out1.flush();
-
-                msgEntrant = in2.readObject();
-                msgSortint = generateMove(msgEntrant);
-                out2.writeObject(msgSortint);
-                out2.flush();
+                player++;
+                if (player == 1) {
+                    msgEntrant = (Tablero) in1.readObject();
+                    out2.writeObject(msgEntrant);
+                    out2.flush();
+                } else if (player == 2) {
+                    msgEntrant = (Tablero) in2.readObject();
+                    out1.writeObject(msgEntrant);
+                    out1.flush();
+                    player = 0;
+                }
             }
         } catch(IOException | ClassNotFoundException e){
             System.out.println(e.getLocalizedMessage());
@@ -50,10 +56,5 @@ public class Connect4ThreadServer implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public Object generateMove(Object en) {
-        en = "Funciona la Conexion";
-        return en;
     }
 }
